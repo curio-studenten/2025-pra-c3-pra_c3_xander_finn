@@ -2,40 +2,9 @@ using System.Text.Json.Serialization;
 
 namespace pra_c3_winui;
 
-public class Player
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
+// ===== API Models (from fifa.amo.rocks) =====
 
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = string.Empty;
-
-    [JsonPropertyName("email")]
-    public string Email { get; set; } = string.Empty;
-
-    [JsonPropertyName("admin")]
-    public bool Admin { get; set; }
-
-    [JsonPropertyName("api_key")]
-    public string ApiKey { get; set; } = string.Empty;
-}
-
-public class Team
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = string.Empty;
-
-    [JsonPropertyName("points")]
-    public int Points { get; set; }
-
-    [JsonPropertyName("creator_id")]
-    public int CreatorId { get; set; }
-}
-
-public class Match
+public class ApiMatch
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
@@ -52,65 +21,120 @@ public class Match
     [JsonPropertyName("team2_name")]
     public string Team2Name { get; set; } = string.Empty;
 
-    [JsonPropertyName("score_team1")]
-    public int? ScoreTeam1 { get; set; }
-
-    [JsonPropertyName("score_team2")]
-    public int? ScoreTeam2 { get; set; }
-
-    [JsonPropertyName("field")]
-    public int Field { get; set; }
-
-    [JsonPropertyName("start_time")]
-    public string? StartTime { get; set; }
-
-    [JsonPropertyName("played")]
-    public bool Played { get; set; }
-
-    // Display property voor de UI
-    public string DisplayScore => Played ? $"{ScoreTeam1} - {ScoreTeam2}" : "- : -";
+    // Display helpers
     public string DisplayMatch => $"{Team1Name} vs {Team2Name}";
-    public string DisplayStatus => Played ? "Gespeeld" : "Gepland";
 }
 
-public class ApiResponse<T>
+public class ApiResult
 {
-    [JsonPropertyName("success")]
-    public bool Success { get; set; }
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
 
-    [JsonPropertyName("message")]
-    public string Message { get; set; } = string.Empty;
+    [JsonPropertyName("team1_id")]
+    public int Team1Id { get; set; }
 
-    [JsonPropertyName("error")]
-    public string Error { get; set; } = string.Empty;
+    [JsonPropertyName("team1_name")]
+    public string Team1Name { get; set; } = string.Empty;
 
-    [JsonPropertyName("player")]
-    public T? Data { get; set; }
+    [JsonPropertyName("team1_score")]
+    public int Team1Score { get; set; }
+
+    [JsonPropertyName("team2_id")]
+    public int Team2Id { get; set; }
+
+    [JsonPropertyName("team2_name")]
+    public string Team2Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("team2_score")]
+    public int Team2Score { get; set; }
+
+    [JsonPropertyName("winner_id")]
+    public int? WinnerId { get; set; }
+
+    // Display helpers
+    public string DisplayMatch => $"{Team1Name} vs {Team2Name}";
+    public string DisplayScore => $"{Team1Score} - {Team2Score}";
+    public string DisplayResult
+    {
+        get
+        {
+            if (WinnerId == Team1Id) return $"🏆 {Team1Name} wint";
+            if (WinnerId == Team2Id) return $"🏆 {Team2Name} wint";
+            return "🤝 Gelijkspel";
+        }
+    }
 }
 
-public class LoginResponse
+public class ApiGoal
 {
-    [JsonPropertyName("success")]
-    public bool Success { get; set; }
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
 
-    [JsonPropertyName("message")]
-    public string Message { get; set; } = string.Empty;
+    [JsonPropertyName("match_id")]
+    public int MatchId { get; set; }
 
-    [JsonPropertyName("error")]
-    public string Error { get; set; } = string.Empty;
+    [JsonPropertyName("minute")]
+    public int Minute { get; set; }
 
-    [JsonPropertyName("player")]
-    public Player? Player { get; set; }
+    [JsonPropertyName("player_id")]
+    public int PlayerId { get; set; }
+
+    [JsonPropertyName("player_team")]
+    public int PlayerTeam { get; set; }
+
+    [JsonPropertyName("player_name")]
+    public string PlayerName { get; set; } = string.Empty;
+
+    // Display helper
+    public string DisplayGoal => $"⚽ {Minute}' - {PlayerName}";
 }
 
-public class RegisterResponse
+// ===== Local User/Gambling Models =====
+
+public class LocalUser
 {
-    [JsonPropertyName("success")]
-    public bool Success { get; set; }
+    public int Id { get; set; }
+    public string Username { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public bool IsAdmin { get; set; }
+    public decimal Credits { get; set; } = 100m;
+}
 
-    [JsonPropertyName("message")]
-    public string Message { get; set; } = string.Empty;
+public class Bet
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public int MatchId { get; set; }
+    public string MatchDisplay { get; set; } = string.Empty;
+    public BetType BetType { get; set; }
+    public int? PredictedWinnerId { get; set; }
+    public string PredictedWinnerName { get; set; } = string.Empty;
+    public decimal Amount { get; set; }
+    public decimal Odds { get; set; }
+    public BetStatus Status { get; set; } = BetStatus.Pending;
+    public decimal? Payout { get; set; }
+    public DateTime PlacedAt { get; set; } = DateTime.Now;
 
-    [JsonPropertyName("player")]
-    public Player? Player { get; set; }
+    public string DisplayBet => BetType == BetType.Draw ? "Gelijkspel" : $"{PredictedWinnerName} wint";
+    public string DisplayStatus => Status switch
+    {
+        BetStatus.Pending => "⏳ Lopend",
+        BetStatus.Won => $"✅ Gewonnen (+€{Payout:F2})",
+        BetStatus.Lost => "❌ Verloren",
+        _ => "?"
+    };
+}
+
+public enum BetType
+{
+    Team1Win,
+    Team2Win,
+    Draw
+}
+
+public enum BetStatus
+{
+    Pending,
+    Won,
+    Lost
 }

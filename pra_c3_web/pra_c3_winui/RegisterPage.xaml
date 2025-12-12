@@ -14,8 +14,8 @@
 
             <!-- Logo / Titel -->
             <TextBlock
-                Text="⚽ Schoolvoetbal"
-                FontSize="36"
+                Text="⚽ Schoolvoetbal Gokken"
+                FontSize="32"
                 FontWeight="Bold"
                 HorizontalAlignment="Center"
                 Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
@@ -23,8 +23,15 @@
             <TextBlock
                 Text="Account Aanmaken"
                 FontSize="24"
+                HorizontalAlignment="Center"/>
+
+            <TextBlock
+                Text="Registreer als gokker en ontvang €100 startkapitaal!"
+                TextWrapping="Wrap"
                 HorizontalAlignment="Center"
-                Margin="0,0,0,20"/>
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                FontSize="12"
+                Margin="0,0,0,10"/>
 
             <!-- Error Message -->
             <InfoBar
@@ -40,23 +47,17 @@
                 Severity="Success"
                 Title="Succes"/>
 
-            <!-- Name -->
+            <!-- Username -->
             <TextBox
-                x:Name="NameTextBox"
-                Header="Naam"
-                PlaceholderText="Jouw naam"/>
-
-            <!-- Email -->
-            <TextBox
-                x:Name="EmailTextBox"
-                Header="E-mailadres"
-                PlaceholderText="voorbeeld@email.nl"/>
+                x:Name="UsernameTextBox"
+                Header="Gebruikersnaam"
+                PlaceholderText="Kies een gebruikersnaam"/>
 
             <!-- Password -->
             <PasswordBox
                 x:Name="PasswordBox"
                 Header="Wachtwoord"
-                PlaceholderText="Minimaal 6 tekens"/>
+                PlaceholderText="Kies een wachtwoord"/>
 
             <!-- Confirm Password -->
             <PasswordBox
@@ -64,48 +65,13 @@
                 Header="Wachtwoord bevestigen"
                 PlaceholderText="Herhaal wachtwoord"/>
 
-            <!-- Role Selection -->
-            <StackPanel Spacing="8" Margin="0,10,0,0">
-                <TextBlock Text="Wat wil je doen?" FontWeight="SemiBold"/>
-                <RadioButton
-                    x:Name="PlayerRadioButton"
-                    Content="⚽ Ik wil voetballen (Speler)"
-                    IsChecked="True"
-                    GroupName="RoleGroup"/>
-                <RadioButton
-                    x:Name="GamblerRadioButton"
-                    Content="🎰 Ik wil wedden op wedstrijden (Gokker)"
-                    GroupName="RoleGroup"/>
-                <TextBlock
-                    Text="Als gokker krijg je 100 credits om mee te beginnen!"
-                    FontSize="12"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Margin="28,0,0,0"/>
-            </StackPanel>
-
             <!-- Register Button -->
             <Button
                 x:Name="RegisterButton"
                 Content="Registreren"
                 HorizontalAlignment="Stretch"
                 Style="{StaticResource AccentButtonStyle}"
-                Click="RegisterButton_Click"
-                Margin="0,10,0,0"/>
-
-            <!-- Loading -->
-            <ProgressRing
-                x:Name="LoadingRing"
-                IsActive="False"
-                HorizontalAlignment="Center"/>
-
-            <!-- Info -->
-            <TextBlock
-                Text="Na registratie kun je inloggen op de website voor alle functies."
-                TextWrapping="Wrap"
-                HorizontalAlignment="Center"
-                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                FontSize="12"
-                Margin="0,10,0,0"/>
+                Click="RegisterButton_Click"/>
 
             <!-- Login Link -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">

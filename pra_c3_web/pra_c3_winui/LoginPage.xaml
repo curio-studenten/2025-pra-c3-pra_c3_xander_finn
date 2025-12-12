@@ -14,19 +14,19 @@
 
             <!-- Logo / Titel -->
             <TextBlock
-                Text="⚽ Schoolvoetbal"
-                FontSize="36"
+                Text="⚽ Schoolvoetbal Gokken"
+                FontSize="32"
                 FontWeight="Bold"
                 HorizontalAlignment="Center"
                 Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
 
             <TextBlock
-                Text="Account Aanmaken"
+                Text="Inloggen"
                 FontSize="24"
                 HorizontalAlignment="Center"/>
 
             <TextBlock
-                Text="Gebruik deze app alleen om een account aan te maken. Daarna kun je inloggen op de website voor alle functies."
+                Text="Log in als gokker om te wedden op wedstrijden, of als admin om resultaten te bekijken."
                 TextWrapping="Wrap"
                 HorizontalAlignment="Center"
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -47,11 +47,11 @@
                 Severity="Success"
                 Title="Succes"/>
 
-            <!-- Email -->
+            <!-- Username -->
             <TextBox
-                x:Name="EmailTextBox"
-                Header="E-mailadres"
-                PlaceholderText="voorbeeld@email.nl"/>
+                x:Name="UsernameTextBox"
+                Header="Gebruikersnaam"
+                PlaceholderText="Gebruikersnaam"/>
 
             <!-- Password -->
             <PasswordBox
@@ -62,7 +62,7 @@
             <!-- Login Button -->
             <Button
                 x:Name="LoginButton"
-                Content="Inloggen (alleen om te testen)"
+                Content="Inloggen"
                 HorizontalAlignment="Stretch"
                 Style="{StaticResource AccentButtonStyle}"
                 Click="LoginButton_Click"/>
@@ -73,12 +73,6 @@
                 IsActive="False"
                 HorizontalAlignment="Center"/>
 
-            <!-- Website Button -->
-            <Button
-                Content="🌐 Ga naar Website"
-                HorizontalAlignment="Stretch"
-                Click="OpenWebsite_Click"/>
-
             <!-- Register Link -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                 <TextBlock Text="Nog geen account? " VerticalAlignment="Center"/>
@@ -86,6 +80,17 @@
                     Content="Registreer hier"
                     Click="RegisterLink_Click"/>
             </StackPanel>
+
+            <!-- Test accounts info -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16" Margin="0,20,0,0">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Test Accounts:" FontWeight="SemiBold"/>
+                    <TextBlock Text="Admin: admin / admin123" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="Gokker: gokker1 / wachtwoord" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="Gokker: gokker2 / wachtwoord" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                </StackPanel>
+            </Border>
 
         </StackPanel>
     </Grid>

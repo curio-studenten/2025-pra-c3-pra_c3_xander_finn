@@ -1,6 +1,5 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 
 namespace pra_c3_winui;
@@ -8,159 +7,247 @@ namespace pra_c3_winui;
 public class ApiService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _baseUrl;
-    private string? _apiKey;
+    private const string BaseUrl = "http://fifa.amo.rocks";
 
-    public ApiService(string baseUrl = "http://localhost:8000")
+    public ApiService()
     {
-        _baseUrl = baseUrl;
         _httpClient = new HttpClient();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 
-    public void SetApiKey(string apiKey)
-    {
-        _apiKey = apiKey;
-        _httpClient.DefaultRequestHeaders.Remove("X-API-KEY");
-        _httpClient.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
-    }
-
-    public async Task<RegisterResponse?> RegisterAsync(string name, string email, string password, string role = "player")
+    /// <summary>
+    /// GET /api/matches.php - Alle wedstrijden (nog niet gespeeld)
+    /// </summary>
+    public async Task<List<ApiMatch>> GetMatchesAsync()
     {
         try
         {
-            var data = new { name, email, password, role };
-            var json = JsonSerializer.Serialize(data);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"{_baseUrl}/api/register", content);
+            var response = await _httpClient.GetAsync($"{BaseUrl}/api/matches.php");
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(responseBody))
             {
-                return JsonSerializer.Deserialize<RegisterResponse>(responseBody);
-            }
-            else
-            {
-                // Try to parse error response
-                try
-                {
-                    var errorResponse = JsonSerializer.Deserialize<RegisterResponse>(responseBody);
-                    return errorResponse;
-                }
-                catch
-                {
-                    return new RegisterResponse { Success = false, Message = $"Error: {response.StatusCode}" };
-                }
+                return JsonSerializer.Deserialize<List<ApiMatch>>(responseBody) ?? new List<ApiMatch>();
             }
         }
         catch (Exception ex)
         {
-            return new RegisterResponse { Success = false, Message = $"Connection error: {ex.Message}" };
+            System.Diagnostics.Debug.WriteLine($"Error fetching matches: {ex.Message}");
         }
+
+        return new List<ApiMatch>();
     }
 
-    public async Task<LoginResponse?> LoginAsync(string email, string password)
+    /// <summary>
+    /// GET /api/results.php - Alle resultaten (gespeelde wedstrijden)
+    /// </summary>
+    public async Task<List<ApiResult>> GetResultsAsync()
     {
         try
         {
-            var data = new { email, password };
-            var json = JsonSerializer.Serialize(data);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"{_baseUrl}/api/login", content);
+            var response = await _httpClient.GetAsync($"{BaseUrl}/api/results.php");
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            var loginResponse = JsonSerializer.Deserialize<LoginResponse>(responseBody);
-
-            if (loginResponse?.Success == true && loginResponse.Player != null)
+            if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(responseBody))
             {
-                SetApiKey(loginResponse.Player.ApiKey);
+                return JsonSerializer.Deserialize<List<ApiResult>>(responseBody) ?? new List<ApiResult>();
             }
-
-            return loginResponse;
         }
         catch (Exception ex)
         {
-            return new LoginResponse { Success = false, Error = $"Connection error: {ex.Message}" };
+            System.Diagnostics.Debug.WriteLine($"Error fetching results: {ex.Message}");
         }
+
+        return new List<ApiResult>();
     }
 
-    public async Task<List<Team>> GetTeamsAsync()
+    /// <summary>
+    /// GET /api/goals.php?match_id={id} - Goals van een specifieke wedstrijd
+    /// </summary>
+    public async Task<List<ApiGoal>> GetGoalsAsync(int matchId)
     {
         try
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/teams");
+            var response = await _httpClient.GetAsync($"{BaseUrl}/api/goals.php?match_id={matchId}");
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(responseBody))
             {
-                return JsonSerializer.Deserialize<List<Team>>(responseBody) ?? new List<Team>();
+                return JsonSerializer.Deserialize<List<ApiGoal>>(responseBody) ?? new List<ApiGoal>();
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // Handle error
+            System.Diagnostics.Debug.WriteLine($"Error fetching goals: {ex.Message}");
         }
 
-        return new List<Team>();
+        return new List<ApiGoal>();
+    }
+}
+
+/// <summary>
+/// Local storage service for users and bets (stored in memory/local file)
+/// </summary>
+public class LocalDataService
+{
+    private List<LocalUser> _users = new();
+    private List<Bet> _bets = new();
+    private int _nextUserId = 1;
+    private int _nextBetId = 1;
+
+    public LocalUser? CurrentUser { get; private set; }
+
+    public LocalDataService()
+    {
+        // Default admin account
+        _users.Add(new LocalUser
+        {
+            Id = _nextUserId++,
+            Username = "admin",
+            Password = "admin123",
+            IsAdmin = true,
+            Credits = 0
+        });
+
+        // Default gambler accounts
+        _users.Add(new LocalUser
+        {
+            Id = _nextUserId++,
+            Username = "gokker1",
+            Password = "wachtwoord",
+            IsAdmin = false,
+            Credits = 100m
+        });
+
+        _users.Add(new LocalUser
+        {
+            Id = _nextUserId++,
+            Username = "gokker2",
+            Password = "wachtwoord",
+            IsAdmin = false,
+            Credits = 100m
+        });
     }
 
-    public async Task<List<Match>> GetMatchesAsync()
+    public bool Login(string username, string password)
     {
-        try
-        {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/matches");
-            var responseBody = await response.Content.ReadAsStringAsync();
+        var user = _users.FirstOrDefault(u =>
+            u.Username.Equals(username, StringComparison.OrdinalIgnoreCase) &&
+            u.Password == password);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return JsonSerializer.Deserialize<List<Match>>(responseBody) ?? new List<Match>();
-            }
-        }
-        catch
+        if (user != null)
         {
-            // Handle error
+            CurrentUser = user;
+            return true;
         }
-
-        return new List<Match>();
+        return false;
     }
 
-    public async Task<List<Team>> GetStandingsAsync()
+    public void Logout()
     {
-        try
-        {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/api/standings");
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
-            {
-                return JsonSerializer.Deserialize<List<Team>>(responseBody) ?? new List<Team>();
-            }
-        }
-        catch
-        {
-            // Handle error
-        }
-
-        return new List<Team>();
+        CurrentUser = null;
     }
 
-    public async Task<bool> UpdateMatchScoreAsync(int matchId, int scoreTeam1, int scoreTeam2)
+    public bool Register(string username, string password)
     {
-        try
+        if (_users.Any(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)))
         {
-            var data = new { score_team1 = scoreTeam1, score_team2 = scoreTeam2 };
-            var json = JsonSerializer.Serialize(data);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PutAsync($"{_baseUrl}/api/matches/{matchId}", content);
-
-            return response.IsSuccessStatusCode;
+            return false; // Username already exists
         }
-        catch
+
+        _users.Add(new LocalUser
+        {
+            Id = _nextUserId++,
+            Username = username,
+            Password = password,
+            IsAdmin = false,
+            Credits = 100m
+        });
+
+        return true;
+    }
+
+    public bool PlaceBet(int matchId, string matchDisplay, BetType betType, int? predictedWinnerId, string predictedWinnerName, decimal amount, decimal odds)
+    {
+        if (CurrentUser == null || CurrentUser.IsAdmin) return false;
+        if (CurrentUser.Credits < amount) return false;
+
+        // Check if already bet on this match
+        if (_bets.Any(b => b.UserId == CurrentUser.Id && b.MatchId == matchId))
         {
             return false;
         }
+
+        CurrentUser.Credits -= amount;
+
+        _bets.Add(new Bet
+        {
+            Id = _nextBetId++,
+            UserId = CurrentUser.Id,
+            MatchId = matchId,
+            MatchDisplay = matchDisplay,
+            BetType = betType,
+            PredictedWinnerId = predictedWinnerId,
+            PredictedWinnerName = predictedWinnerName,
+            Amount = amount,
+            Odds = odds,
+            Status = BetStatus.Pending,
+            PlacedAt = DateTime.Now
+        });
+
+        return true;
+    }
+
+    public List<Bet> GetUserBets()
+    {
+        if (CurrentUser == null) return new List<Bet>();
+        return _bets.Where(b => b.UserId == CurrentUser.Id).OrderByDescending(b => b.PlacedAt).ToList();
+    }
+
+    public List<Bet> GetPendingBets()
+    {
+        return _bets.Where(b => b.Status == BetStatus.Pending).ToList();
+    }
+
+    public void ProcessBetResult(int matchId, int? winnerId)
+    {
+        var matchBets = _bets.Where(b => b.MatchId == matchId && b.Status == BetStatus.Pending).ToList();
+
+        foreach (var bet in matchBets)
+        {
+            bool won = false;
+
+            if (bet.BetType == BetType.Draw && winnerId == null)
+            {
+                won = true;
+            }
+            else if (bet.BetType != BetType.Draw && bet.PredictedWinnerId == winnerId)
+            {
+                won = true;
+            }
+
+            if (won)
+            {
+                bet.Status = BetStatus.Won;
+                bet.Payout = bet.Amount * bet.Odds;
+
+                var user = _users.FirstOrDefault(u => u.Id == bet.UserId);
+                if (user != null)
+                {
+                    user.Credits += bet.Payout.Value;
+                }
+            }
+            else
+            {
+                bet.Status = BetStatus.Lost;
+                bet.Payout = 0;
+            }
+        }
+    }
+
+    public bool HasBetOnMatch(int matchId)
+    {
+        if (CurrentUser == null) return false;
+        return _bets.Any(b => b.UserId == CurrentUser.Id && b.MatchId == matchId);
     }
 }

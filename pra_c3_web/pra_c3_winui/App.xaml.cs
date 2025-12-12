@@ -5,7 +5,8 @@ namespace pra_c3_winui;
 public partial class App : Application
 {
     public static Window? MainWindow { get; private set; }
-    public static Player? CurrentPlayer { get; set; }
+    public static ApiService ApiService { get; } = new ApiService();
+    public static LocalDataService DataService { get; } = new LocalDataService();
 
     public App()
     {

@@ -10,29 +10,18 @@ public sealed partial class RegisterPage : Page
         this.InitializeComponent();
     }
 
-    private async void RegisterButton_Click(object sender, RoutedEventArgs e)
+    private void RegisterButton_Click(object sender, RoutedEventArgs e)
     {
         ErrorInfoBar.IsOpen = false;
         SuccessInfoBar.IsOpen = false;
 
-        var name = NameTextBox.Text.Trim();
-        var email = EmailTextBox.Text.Trim();
+        var username = UsernameTextBox.Text.Trim();
         var password = PasswordBox.Password;
         var confirmPassword = ConfirmPasswordBox.Password;
-        var role = GamblerRadioButton.IsChecked == true ? "gambler" : "player";
 
-        // Validatie
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) ||
-            string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
             ErrorInfoBar.Message = "Vul alle velden in.";
-            ErrorInfoBar.IsOpen = true;
-            return;
-        }
-
-        if (password.Length < 6)
-        {
-            ErrorInfoBar.Message = "Wachtwoord moet minimaal 6 tekens bevatten.";
             ErrorInfoBar.IsOpen = true;
             return;
         }
@@ -44,43 +33,27 @@ public sealed partial class RegisterPage : Page
             return;
         }
 
-        RegisterButton.IsEnabled = false;
-        LoadingRing.IsActive = true;
-
-        try
+        if (password.Length < 6)
         {
-            var response = await MainWindow.ApiService.RegisterAsync(name, email, password, role);
-
-            if (response?.Success == true && response.Player != null)
-            {
-                var roleText = role == "gambler" ? "Gokker" : "Speler";
-                var creditsText = role == "gambler" ? " Je hebt 100 credits gekregen!" : "";
-
-                SuccessInfoBar.Message = $"Account aangemaakt als {roleText}!{creditsText} Je kunt nu inloggen op de website.";
-                SuccessInfoBar.IsOpen = true;
-
-                // Clear form
-                NameTextBox.Text = "";
-                EmailTextBox.Text = "";
-                PasswordBox.Password = "";
-                ConfirmPasswordBox.Password = "";
-                PlayerRadioButton.IsChecked = true;
-            }
-            else
-            {
-                ErrorInfoBar.Message = response?.Message ?? "Registratie mislukt. Probeer het opnieuw.";
-                ErrorInfoBar.IsOpen = true;
-            }
-        }
-        catch (Exception ex)
-        {
-            ErrorInfoBar.Message = $"Fout: {ex.Message}";
+            ErrorInfoBar.Message = "Wachtwoord moet minimaal 6 tekens zijn.";
             ErrorInfoBar.IsOpen = true;
+            return;
         }
-        finally
+
+        if (App.DataService.Register(username, password))
         {
-            RegisterButton.IsEnabled = true;
-            LoadingRing.IsActive = false;
+            SuccessInfoBar.Message = "Account aangemaakt! Je kunt nu inloggen.";
+            SuccessInfoBar.IsOpen = true;
+
+            // Clear fields
+            UsernameTextBox.Text = "";
+            PasswordBox.Password = "";
+            ConfirmPasswordBox.Password = "";
+        }
+        else
+        {
+            ErrorInfoBar.Message = "Gebruikersnaam bestaat al.";
+            ErrorInfoBar.IsOpen = true;
         }
     }
 

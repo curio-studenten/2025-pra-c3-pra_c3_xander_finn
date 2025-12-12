@@ -4,12 +4,10 @@ namespace pra_c3_winui;
 
 public sealed partial class MainWindow : Window
 {
-    public static ApiService ApiService { get; } = new ApiService();
-
     public MainWindow()
     {
         this.InitializeComponent();
-        this.Title = "⚽ Schoolvoetbal - WinUI App";
+        this.Title = "⚽ Schoolvoetbal Gokken";
 
         // Start met de login pagina
         ContentFrame.Navigate(typeof(LoginPage));

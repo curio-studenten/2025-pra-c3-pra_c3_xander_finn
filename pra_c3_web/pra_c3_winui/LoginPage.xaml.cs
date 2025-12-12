@@ -1,6 +1,5 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Windows.System;
 
 namespace pra_c3_winui;
 
@@ -11,54 +10,37 @@ public sealed partial class LoginPage : Page
         this.InitializeComponent();
     }
 
-    private async void LoginButton_Click(object sender, RoutedEventArgs e)
+    private void LoginButton_Click(object sender, RoutedEventArgs e)
     {
         ErrorInfoBar.IsOpen = false;
         SuccessInfoBar.IsOpen = false;
 
-        var email = EmailTextBox.Text.Trim();
+        var username = UsernameTextBox.Text.Trim();
         var password = PasswordBox.Password;
 
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
             ErrorInfoBar.Message = "Vul alle velden in.";
             ErrorInfoBar.IsOpen = true;
             return;
         }
 
-        LoginButton.IsEnabled = false;
-        LoadingRing.IsActive = true;
-
-        try
+        if (App.DataService.Login(username, password))
         {
-            var response = await MainWindow.ApiService.LoginAsync(email, password);
+            SuccessInfoBar.Message = "Succesvol ingelogd!";
+            SuccessInfoBar.IsOpen = true;
 
-            if (response?.Success == true && response.Player != null)
+            // Navigate to main page
+            if (App.MainWindow is MainWindow mainWindow)
             {
-                SuccessInfoBar.Message = "Succesvol ingelogd! Je kunt nu de website gebruiken.";
-                SuccessInfoBar.IsOpen = true;
-            }
-            else
-            {
-                ErrorInfoBar.Message = response?.Error ?? "Inloggen mislukt. Controleer je gegevens.";
-                ErrorInfoBar.IsOpen = true;
+                mainWindow.NavigateToMainPage();
             }
         }
-        catch (Exception ex)
+        else
         {
-            ErrorInfoBar.Message = $"Fout: {ex.Message}";
+            ErrorInfoBar.Message = "Ongeldige gebruikersnaam of wachtwoord.";
             ErrorInfoBar.IsOpen = true;
         }
-        finally
-        {
-            LoginButton.IsEnabled = true;
-            LoadingRing.IsActive = false;
-        }
-    }
-
-    private async void OpenWebsite_Click(object sender, RoutedEventArgs e)
-    {
-        await Launcher.LaunchUriAsync(new Uri("http://localhost:8000"));
     }
 
     private void RegisterLink_Click(object sender, RoutedEventArgs e)

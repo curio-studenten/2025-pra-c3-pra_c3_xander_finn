@@ -19,52 +19,32 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="20">
-                <TextBlock
-                    Text="⚽ Schoolvoetbal"
-                    FontSize="24"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    VerticalAlignment="Center"/>
-                <TextBlock x:ConnectionId='5'
-                    x:Name="WelcomeText"
-                    FontSize="16"
-                    Foreground="White"
-                    VerticalAlignment="Center"
-                    Opacity="0.9"/>
-                <Border x:ConnectionId='6'
-                    x:Name="AdminBadge"
-                    Background="#9b59b6"
-                    CornerRadius="4"
-                    Padding="8,4"
-                    VerticalAlignment="Center"
-                    Visibility="Collapsed">
-                    <TextBlock Text="Admin" Foreground="White" FontSize="12"/>
-                </Border>
+                <TextBlock Text="⚽ Schoolvoetbal Gokken" FontSize="24" FontWeight="Bold"
+                           Foreground="White" VerticalAlignment="Center"/>
+                <TextBlock x:ConnectionId='6' x:Name="UserInfoText" FontSize="14"
+                           Foreground="White" VerticalAlignment="Center" Opacity="0.9"/>
             </StackPanel>
 
-            <Button x:ConnectionId='4'
-                Grid.Column="1"
-                Content="Uitloggen"
-                                          />
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                <TextBlock x:ConnectionId='4' x:Name="CreditsText" FontSize="16" FontWeight="SemiBold"
+                           Foreground="White" VerticalAlignment="Center"/>
+                <Button x:ConnectionId='5' Content="Uitloggen"                           />
+            </StackPanel>
         </Grid>
 
         <!-- Content -->
-        <NavigationView x:ConnectionId='2'
-            Grid.Row="1"
-            x:Name="NavView"
-            IsBackButtonVisible="Collapsed"
-            IsSettingsVisible="False"
-            PaneDisplayMode="Top"
-                                                       >
-
+        <NavigationView x:ConnectionId='2' Grid.Row="1" x:Name="NavView"
+                        IsBackButtonVisible="Collapsed"
+                        IsSettingsVisible="False"
+                        PaneDisplayMode="Top"
+                                                                   >
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="🏆 Stand" Tag="Standings"/>
-                <NavigationViewItem Content="👥 Teams" Tag="Teams"/>
-                <NavigationViewItem Content="⚽ Wedstrijden" Tag="Matches"/>
+                <NavigationViewItem Content="🎰 Wedden" Tag="betting"/>
+                <NavigationViewItem Content="📋 Mijn Weddenschappen" Tag="mybets"/>
+                <NavigationViewItem Content="📊 Resultaten" Tag="results"/>
             </NavigationView.MenuItems>
 
-            <Frame x:ConnectionId='3' x:Name="ContentFrame" Padding="20"/>
-
+            <Frame x:ConnectionId='3' x:Name="ContentFrame"/>
         </NavigationView>
     </Grid>
 </Page>

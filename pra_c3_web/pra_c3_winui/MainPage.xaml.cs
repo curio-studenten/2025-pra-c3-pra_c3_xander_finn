@@ -8,24 +8,20 @@ public sealed partial class MainPage : Page
     public MainPage()
     {
         this.InitializeComponent();
-        this.Loaded += MainPage_Loaded;
+        UpdateUserInfo();
+
+        // Select first item
+        NavView.SelectedItem = NavView.MenuItems[0];
     }
 
-    private void MainPage_Loaded(object sender, RoutedEventArgs e)
+    private void UpdateUserInfo()
     {
-        // Toon welkomsttekst
-        if (App.CurrentPlayer != null)
+        var user = App.DataService.CurrentUser;
+        if (user != null)
         {
-            WelcomeText.Text = $"Welkom, {App.CurrentPlayer.Name}!";
-
-            if (App.CurrentPlayer.Admin)
-            {
-                AdminBadge.Visibility = Visibility.Visible;
-            }
+            UserInfoText.Text = user.IsAdmin ? $"👑 Admin: {user.Username}" : $"🎰 Gokker: {user.Username}";
+            CreditsText.Text = user.IsAdmin ? "" : $"💰 €{user.Credits:F2}";
         }
-
-        // Selecteer eerste item
-        NavView.SelectedItem = NavView.MenuItems[0];
     }
 
     private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -33,17 +29,16 @@ public sealed partial class MainPage : Page
         if (args.SelectedItem is NavigationViewItem item)
         {
             var tag = item.Tag?.ToString();
-
             switch (tag)
             {
-                case "Standings":
-                    ContentFrame.Navigate(typeof(StandingsPage));
+                case "betting":
+                    ContentFrame.Navigate(typeof(BettingPage));
                     break;
-                case "Teams":
-                    ContentFrame.Navigate(typeof(TeamsPage));
+                case "mybets":
+                    ContentFrame.Navigate(typeof(MyBetsPage));
                     break;
-                case "Matches":
-                    ContentFrame.Navigate(typeof(MatchesPage));
+                case "results":
+                    ContentFrame.Navigate(typeof(ResultsPage));
                     break;
             }
         }
@@ -51,11 +46,15 @@ public sealed partial class MainPage : Page
 
     private void LogoutButton_Click(object sender, RoutedEventArgs e)
     {
-        App.CurrentPlayer = null;
-
+        App.DataService.Logout();
         if (App.MainWindow is MainWindow mainWindow)
         {
             mainWindow.NavigateTo(typeof(LoginPage));
         }
+    }
+
+    public void RefreshCredits()
+    {
+        UpdateUserInfo();
     }
 }
