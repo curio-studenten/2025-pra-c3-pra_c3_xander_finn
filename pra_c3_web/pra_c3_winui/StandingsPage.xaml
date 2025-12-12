@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="pra_c3_winui.StandingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="20" Margin="0,0,0,20">
+            <TextBlock Text="🏆 Klassement" FontSize="28" FontWeight="Bold"/>
+            <Button
+                x:Name="RefreshButton"
+                Content="🔄 Vernieuwen"
+                Click="RefreshButton_Click"/>
+            <ProgressRing
+                x:Name="LoadingRing"
+                IsActive="False"
+                Width="24"
+                Height="24"/>
+        </StackPanel>
+
+        <!-- Standings List -->
+        <ListView
+            Grid.Row="1"
+            x:Name="StandingsListView"
+            SelectionMode="None">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid Padding="12" Background="{ThemeResource AccentFillColorDefaultBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="#" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Grid.Column="1" Text="Team" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Grid.Column="2" Text="Punten" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Position}" FontSize="16"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="16" FontWeight="SemiBold"/>
+                        <TextBlock Grid.Column="2" Text="{Binding Points}" FontSize="18" FontWeight="Bold"
+                                   Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" HorizontalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Empty State -->
+        <StackPanel
+            x:Name="EmptyState"
+            Grid.Row="1"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Visibility="Collapsed">
+            <TextBlock Text="🏆" FontSize="64" HorizontalAlignment="Center"/>
+            <TextBlock Text="Nog geen teams" FontSize="18" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Page>

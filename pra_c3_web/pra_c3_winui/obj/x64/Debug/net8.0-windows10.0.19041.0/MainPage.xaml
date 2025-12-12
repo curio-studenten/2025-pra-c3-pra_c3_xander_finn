@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="pra_c3_winui.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Background="{ThemeResource AccentFillColorDefaultBrush}" Padding="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="20">
+                <TextBlock
+                    Text="⚽ Schoolvoetbal"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    VerticalAlignment="Center"/>
+                <TextBlock x:ConnectionId='5'
+                    x:Name="WelcomeText"
+                    FontSize="16"
+                    Foreground="White"
+                    VerticalAlignment="Center"
+                    Opacity="0.9"/>
+                <Border x:ConnectionId='6'
+                    x:Name="AdminBadge"
+                    Background="#9b59b6"
+                    CornerRadius="4"
+                    Padding="8,4"
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed">
+                    <TextBlock Text="Admin" Foreground="White" FontSize="12"/>
+                </Border>
+            </StackPanel>
+
+            <Button x:ConnectionId='4'
+                Grid.Column="1"
+                Content="Uitloggen"
+                                          />
+        </Grid>
+
+        <!-- Content -->
+        <NavigationView x:ConnectionId='2'
+            Grid.Row="1"
+            x:Name="NavView"
+            IsBackButtonVisible="Collapsed"
+            IsSettingsVisible="False"
+            PaneDisplayMode="Top"
+                                                       >
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="🏆 Stand" Tag="Standings"/>
+                <NavigationViewItem Content="👥 Teams" Tag="Teams"/>
+                <NavigationViewItem Content="⚽ Wedstrijden" Tag="Matches"/>
+            </NavigationView.MenuItems>
+
+            <Frame x:ConnectionId='3' x:Name="ContentFrame" Padding="20"/>
+
+        </NavigationView>
+    </Grid>
+</Page>
+

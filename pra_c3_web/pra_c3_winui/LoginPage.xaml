@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="pra_c3_winui.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="40">
+        <StackPanel
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Width="400"
+            Spacing="16">
+
+            <!-- Logo / Titel -->
+            <TextBlock
+                Text="⚽ Schoolvoetbal"
+                FontSize="36"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+
+            <TextBlock
+                Text="Account Aanmaken"
+                FontSize="24"
+                HorizontalAlignment="Center"/>
+
+            <TextBlock
+                Text="Gebruik deze app alleen om een account aan te maken. Daarna kun je inloggen op de website voor alle functies."
+                TextWrapping="Wrap"
+                HorizontalAlignment="Center"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                FontSize="12"
+                Margin="0,0,0,10"/>
+
+            <!-- Error Message -->
+            <InfoBar
+                x:Name="ErrorInfoBar"
+                IsOpen="False"
+                Severity="Error"
+                Title="Fout"/>
+
+            <!-- Success Message -->
+            <InfoBar
+                x:Name="SuccessInfoBar"
+                IsOpen="False"
+                Severity="Success"
+                Title="Succes"/>
+
+            <!-- Email -->
+            <TextBox
+                x:Name="EmailTextBox"
+                Header="E-mailadres"
+                PlaceholderText="voorbeeld@email.nl"/>
+
+            <!-- Password -->
+            <PasswordBox
+                x:Name="PasswordBox"
+                Header="Wachtwoord"
+                PlaceholderText="Wachtwoord"/>
+
+            <!-- Login Button -->
+            <Button
+                x:Name="LoginButton"
+                Content="Inloggen (alleen om te testen)"
+                HorizontalAlignment="Stretch"
+                Style="{StaticResource AccentButtonStyle}"
+                Click="LoginButton_Click"/>
+
+            <!-- Loading -->
+            <ProgressRing
+                x:Name="LoadingRing"
+                IsActive="False"
+                HorizontalAlignment="Center"/>
+
+            <!-- Website Button -->
+            <Button
+                Content="🌐 Ga naar Website"
+                HorizontalAlignment="Stretch"
+                Click="OpenWebsite_Click"/>
+
+            <!-- Register Link -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <TextBlock Text="Nog geen account? " VerticalAlignment="Center"/>
+                <HyperlinkButton
+                    Content="Registreer hier"
+                    Click="RegisterLink_Click"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Page>
