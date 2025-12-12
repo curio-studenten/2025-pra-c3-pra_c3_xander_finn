@@ -173,4 +173,23 @@ class MatchController extends Controller
         $team1->save();
         $team2->save();
     }
+
+    public function destroy($id)
+    {
+        $player = Player::find(session('player_id'));
+        if (!$player || !$player->admin) {
+            return redirect('/matches')->withErrors(['error' => 'Alleen beheerders kunnen wedstrijden verwijderen.']);
+        }
+
+        $match = GameMatch::findOrFail($id);
+
+        // Als de wedstrijd al gespeeld was, trek de punten er eerst af
+        if ($match->played) {
+            $this->removePoints($match);
+        }
+
+        $match->delete();
+
+        return redirect('/matches')->with('success', 'Wedstrijd verwijderd!');
+    }
 }

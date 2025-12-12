@@ -13,7 +13,7 @@
 
         <!-- Header -->
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="🎰 Wedden op Wedstrijden" FontSize="28" FontWeight="Bold"/>
+            <TextBlock Text="Wedden op Wedstrijden" FontSize="28" FontWeight="Bold"/>
             <TextBlock Text="Selecteer een wedstrijd en plaats je weddenschap!"
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
         </StackPanel>
@@ -35,8 +35,8 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                        <TextBlock Text="📅 Beschikbare Wedstrijden" FontSize="18" FontWeight="SemiBold"/>
-                        <Button x:ConnectionId='19' Content="🔄 Vernieuwen" Margin="20,0,0,0"                            />
+                        <TextBlock Text="Beschikbare Wedstrijden" FontSize="18" FontWeight="SemiBold"/>
+                        <Button x:ConnectionId='19' Content="Vernieuwen" Margin="20,0,0,0"                            />
                     </StackPanel>
 
                     <ListView x:ConnectionId='15' Grid.Row="1" x:Name="MatchesListView"
@@ -51,7 +51,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="{Binding DisplayMatch}"
                                                FontSize="16" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" Text="⚽" FontSize="20"
+                                    <TextBlock Grid.Column="1" Text="" FontSize="20"
                                                VerticalAlignment="Center" Opacity="0.5"/>
                                 </Grid>
                             </DataTemplate>
@@ -73,7 +73,7 @@
             <Border Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                     CornerRadius="8" Padding="20" Margin="10,0,0,0">
                 <StackPanel x:ConnectionId='2' x:Name="BettingPanel" Spacing="16">
-                    <TextBlock Text="💰 Plaats Weddenschap" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock Text="Plaats Weddenschap" FontSize="18" FontWeight="SemiBold"/>
 
                     <!-- Selected Match -->
                     <StackPanel>
@@ -126,7 +126,7 @@
                         </Border>
 
                         <!-- Place Bet Button -->
-                        <Button x:ConnectionId='8' x:Name="PlaceBetButton" Content="💰 Plaats Weddenschap"
+                        <Button x:ConnectionId='8' x:Name="PlaceBetButton" Content="Plaats Weddenschap"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource AccentButtonStyle}"
                                                             />

@@ -50,6 +50,11 @@
                         @if($player->admin)
                             <td>
                                 <a href="/matches/{{ $match->id }}/edit" class="btn btn-primary btn-sm">Score Invoeren</a>
+                                <form action="/matches/{{ $match->id }}" method="POST" style="display: inline;" onsubmit="return confirm('Weet je zeker dat je deze wedstrijd wilt verwijderen?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">🗑️ Verwijderen</button>
+                                </form>
                             </td>
                         @endif
                     </tr>

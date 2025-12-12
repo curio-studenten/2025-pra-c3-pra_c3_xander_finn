@@ -8,18 +8,65 @@
     <Grid Padding="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="📋 Mijn Weddenschappen" FontSize="28" FontWeight="Bold"/>
-            <TextBlock Text="Bekijk al je geplaatste weddenschappen"
-                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Mijn Weddenschappen" FontSize="28" FontWeight="Bold"/>
+                <TextBlock Text="Bekijk al je geplaatste weddenschappen"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            </StackPanel>
+            <Button x:ConnectionId='9' Grid.Column="1" Content="Vernieuwen"                            
+                    VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- Stats -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16" Margin="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="Totaal Ingezet" FontSize="12"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock x:ConnectionId='8' x:Name="TotalBetText" Text="€0.00" FontSize="24" FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16" Margin="4,0">
+                <StackPanel>
+                    <TextBlock Text="Totaal Gewonnen" FontSize="12"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock x:ConnectionId='7' x:Name="TotalWonText" Text="€0.00" FontSize="24" FontWeight="Bold"
+                               Foreground="Green"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="8" Padding="16" Margin="8,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="Lopende Weddenschappen" FontSize="12"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock x:ConnectionId='6' x:Name="PendingCountText" Text="0" FontSize="24" FontWeight="Bold"
+                               Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
 
         <!-- Bets List -->
-        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+        <Border Grid.Row="2" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="8" Padding="16">
             <Grid>
                 <ListView x:ConnectionId='2' x:Name="BetsListView">
@@ -55,7 +102,7 @@
                                     <Run Text="x)"/>
                                 </TextBlock>
 
-                                <!-- Amount -->
+                                <!-- Status -->
                                 <TextBlock Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
                                            Text="{Binding DisplayStatus}"
                                            VerticalAlignment="Center"
@@ -71,6 +118,9 @@
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                            Visibility="Collapsed"/>
+
+                <ProgressRing x:ConnectionId='4' x:Name="LoadingRing" IsActive="False"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </Border>
     </Grid>

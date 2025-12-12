@@ -14,13 +14,13 @@
         <!-- Header -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
             <StackPanel>
-                <TextBlock Text="📊 Wedstrijd Resultaten" FontSize="28" FontWeight="Bold"/>
+                <TextBlock Text="Wedstrijd Resultaten" FontSize="28" FontWeight="Bold"/>
                 <TextBlock Text="Bekijk de uitslagen van gespeelde wedstrijden"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
-            <Button x:ConnectionId='11' Content="🔄 Vernieuwen" Margin="30,0,0,0" VerticalAlignment="Center"
+            <Button x:ConnectionId='11' Content="Vernieuwen" Margin="30,0,0,0" VerticalAlignment="Center"
                                                />
-            <Button x:ConnectionId='12' x:Name="ProcessBetsButton" Content="💰 Verwerk Weddenschappen"
+            <Button x:ConnectionId='12' x:Name="ProcessBetsButton" Content="Verwerk Weddenschappen"
                     Margin="10,0,0,0" VerticalAlignment="Center"
                     Style="{StaticResource AccentButtonStyle}"
                                                    />
@@ -59,7 +59,7 @@
                                 </Border>
 
                                 <!-- View Goals -->
-                                <Button x:ConnectionId='10' Grid.Column="2" Content="⚽ Goals" Tag="{Binding Id}"
+                                <Button x:ConnectionId='10' Grid.Column="2" Content="Goals" Tag="{Binding Id}"
                                                                      />
                             </Grid>
                         </DataTemplate>
@@ -78,7 +78,7 @@
         </Border>
 
         <!-- Goals Dialog -->
-        <ContentDialog x:ConnectionId='2' x:Name="GoalsDialog" Title="⚽ Doelpunten" CloseButtonText="Sluiten">
+        <ContentDialog x:ConnectionId='2' x:Name="GoalsDialog" Title="Doelpunten" CloseButtonText="Sluiten">
             <StackPanel MinWidth="300" Spacing="8">
                 <ListView x:ConnectionId='3' x:Name="GoalsListView">
                     <ListView.ItemTemplate>

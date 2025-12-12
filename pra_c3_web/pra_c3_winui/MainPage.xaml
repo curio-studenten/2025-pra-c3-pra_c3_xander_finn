@@ -19,7 +19,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="20">
-                <TextBlock Text="⚽ Schoolvoetbal Gokken" FontSize="24" FontWeight="Bold"
+                <TextBlock Text="Schoolvoetbal Gokken" FontSize="24" FontWeight="Bold"
                            Foreground="White" VerticalAlignment="Center"/>
                 <TextBlock x:Name="UserInfoText" FontSize="14"
                            Foreground="White" VerticalAlignment="Center" Opacity="0.9"/>
@@ -39,9 +39,9 @@
                         PaneDisplayMode="Top"
                         SelectionChanged="NavView_SelectionChanged">
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="🎰 Wedden" Tag="betting"/>
-                <NavigationViewItem Content="📋 Mijn Weddenschappen" Tag="mybets"/>
-                <NavigationViewItem Content="📊 Resultaten" Tag="results"/>
+                <NavigationViewItem Content="Wedden" Tag="betting"/>
+                <NavigationViewItem Content="Mijn Weddenschappen" Tag="mybets"/>
+                <NavigationViewItem Content="Resultaten" Tag="results"/>
             </NavigationView.MenuItems>
 
             <Frame x:Name="ContentFrame"/>

@@ -39,11 +39,9 @@ Route::get('/matches/generate', [MatchController::class, 'showGenerate']);
 Route::post('/matches/generate', [MatchController::class, 'generate']);
 Route::get('/matches/{id}/edit', [MatchController::class, 'edit']);
 Route::put('/matches/{id}', [MatchController::class, 'update']);
+Route::delete('/matches/{id}', [MatchController::class, 'destroy']);
 
-// API routes (voor C# WinUI applicatie - alleen registratie)
-Route::post('/api/register', [ApiController::class, 'register']);
-Route::post('/api/login', [ApiController::class, 'login']);
-Route::get('/api/teams', [ApiController::class, 'teams']);
-Route::get('/api/matches', [ApiController::class, 'matches']);
-Route::put('/api/matches/{id}', [ApiController::class, 'updateMatch']);
-Route::get('/api/standings', [ApiController::class, 'standings']);
+// API routes (voor C# WinUI gok applicatie)
+Route::get('/api/matches.php', [ApiController::class, 'apiMatches']);
+Route::get('/api/results.php', [ApiController::class, 'apiResults']);
+Route::get('/api/goals.php', [ApiController::class, 'apiGoals']);

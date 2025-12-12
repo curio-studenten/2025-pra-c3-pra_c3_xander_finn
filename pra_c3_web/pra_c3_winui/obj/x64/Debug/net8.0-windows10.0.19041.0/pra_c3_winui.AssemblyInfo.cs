@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("pra_c3_winui")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98b675f62e9c9a71ba5c375ccbce20520e7f6d7e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d89c715012792b91a6fae79c10b2967eee65d7da")]
 [assembly: System.Reflection.AssemblyProductAttribute("pra_c3_winui")]
 [assembly: System.Reflection.AssemblyTitleAttribute("pra_c3_winui")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

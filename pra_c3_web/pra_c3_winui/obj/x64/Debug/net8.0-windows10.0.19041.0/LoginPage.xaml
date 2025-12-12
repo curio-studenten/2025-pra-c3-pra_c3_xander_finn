@@ -14,7 +14,7 @@
 
             <!-- Logo / Titel -->
             <TextBlock
-                Text="⚽ Schoolvoetbal Gokken"
+                Text="Schoolvoetbal Gokken"
                 FontSize="32"
                 FontWeight="Bold"
                 HorizontalAlignment="Center"
